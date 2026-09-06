@@ -1,0 +1,16 @@
+FROM agent-base:latest
+
+# Install Cursor's CLI using the official installer.
+
+RUN curl -fsSL https://cursor.com/install | bash \
+    && cursor-agent --version
+
+
+RUN mkdir -p \
+    "${HOME}/.cursor" \
+    "${HOME}/.local/state/cursor" \
+    "${HOME}/.local/share/cursor"
+
+WORKDIR /workspace
+
+CMD ["cursor-agent"]

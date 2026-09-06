@@ -1,0 +1,15 @@
+FROM agent-base:latest
+
+ENV NPM_CONFIG_PREFIX=${HOME}/.local
+
+RUN npm install -g @openai/codex \
+    && codex --version
+
+RUN mkdir -p \
+    "${HOME}/.codex" \
+    "${HOME}/.local/state/codex" \
+    "${HOME}/.local/share/codex"
+
+WORKDIR /workspace
+
+CMD ["codex"]

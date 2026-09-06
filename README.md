@@ -1,15 +1,17 @@
 # containers
 
-Podman-based development environments with OpenCode and Claude Code.
+Podman-based development environments with AI coding agents.
 
 ## What's included
 
-A shared base image (`agent-base`) provides a full multi-language toolchain on Ubuntu 24.04. Two agent images derive from it:
+A shared base image (`agent-base`) provides a full multi-language toolchain on Ubuntu 24.04. Four agent images derive from it:
 
 | Image | Agent | Containerfile |
 |---|---|---|
 | `opencode-dev` | OpenCode | `Containerfile-opencode` |
 | `claude-dev` | Claude Code | `Containerfile-claude` |
+| `codex-dev` | Codex | `Containerfile-codex` |
+| `cursor-dev` | Cursor | `Containerfile-cursor` |
 
 ### Toolchain (base image)
 
@@ -32,20 +34,20 @@ The launcher locates the Containerfile relative to itself, so the repo can live 
 
 ## Quick start
 
-### OpenCode
+### One-time setup
 
 ```bash
 git clone https://github.com/sgaflv/containers ~/containers
-cd /path/to/your/project
-~/containers/opencode
+export PATH="$HOME/containers:$PATH"
 ```
 
-### Claude Code
+Add the `export` line to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.) to make it permanent.
+
+### Launch an agent
 
 ```bash
-git clone https://github.com/sgaflv/containers ~/containers
 cd /path/to/your/project
-~/containers/claude
+opencode    # or: claude, codex, cursor
 ```
 
 On first run the image is built (slow), then a per-project container is created and the agent launches inside it. Subsequent runs reuse the existing container.
@@ -60,15 +62,21 @@ On first run the image is built (slow), then a per-project container is created 
 | `claude` | Launch Claude Code in the current project's container |
 | `claude sh` | Open a bash shell in the existing Claude container |
 | `claude rm` | Remove all Claude containers and images |
+| `codex` | Launch Codex in the current project's container |
+| `codex sh` | Open a bash shell in the existing Codex container |
+| `codex rm` | Remove all Codex containers and images |
+| `cursor` | Launch Cursor in the current project's container |
+| `cursor sh` | Open a bash shell in the existing Cursor container |
+| `cursor rm` | Remove all Cursor containers and images |
 
-Each project gets its own container (`opencode-<projectname>` or `claude-<projectname>`), so bind mounts never cross projects.
+Each project gets its own container (`<agent>-<projectname>`), so bind mounts never cross projects.
 
 ## Security
 
 - `--cap-drop=ALL` — all Linux capabilities dropped
 - `--security-opt=no-new-privileges` — prevents privilege escalation
 - `--userns=keep-id` — UID/GID mapped to match the host user
-- Agent config (`~/.config/opencode` or `~/.claude`) is bind-mounted, not baked into the image
+- Agent config (`~/.config/opencode`, `~/.claude`, `~/.codex`, `~/.cursor`) is bind-mounted, not baked into the image
 
 ## Customization
 

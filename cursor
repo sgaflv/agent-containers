@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+AGENT_NAME="Cursor"
+
+AGENT_CONTAINERFILE=""
+
+AGENT_IMAGE_NAME="cursor-dev:latest"
+
+CONTAINER_NAME=""
+
+SCRIPT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+AGENT_CONTAINERFILE="$SCRIPT_DIR/Containerfile-cursor"
+
+PROJECT_NAME="$(basename "$(realpath "$(pwd)")")"
+
+CONTAINER_NAME="cursor-${PROJECT_NAME}"
+
+# shellcheck source=run-agent-common.sh
+
+source "$SCRIPT_DIR/run-agent-common.sh"
+
+prepare_persistent_state() {
+    mkdir -p "$HOME/.cursor"
+    mkdir -p "$HOME/.local/state/cursor"
+    mkdir -p "$HOME/.local/share/cursor"
+}
+
+run_new_container() {
+    exec podman run -it  \
+        --name "$CONTAINER_NAME"  \
+        --userns=keep-id  \
+        --cap-drop=ALL \
+        --security-opt=no-new-privileges \
+        --network=host \
+        -e XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR}" \
+        -e HOME=/home/agentuser \
+        -e XDG_CONFIG_HOME=/home/agentuser/.config \
+        -e XDG_DATA_HOME=/home/agentuser/.local/share \
+        -e XDG_CACHE_HOME=/home/agentuser/.cache \
+        -e ANDROID_HOME=/home/agentuser/Android/Sdk \
+        -v "$HOME/.cursor:/home/agentuser/.cursor:rw,Z" \
+        -v "$HOME/.local/share/cursor:/home/agentuser/.local/share/cursor:rw,Z" \
+        -v "$HOME/.local/state/cursor:/home/agentuser/.local/state/cursor:rw,Z" \
+        -v "$PROJECT_DIR:$CONTAINER_PROJECT_DIR:rw,Z" \
+        -w "$CONTAINER_PROJECT_DIR" \
+        "$AGENT_IMAGE_NAME"
+}
+
+run_agent "$@"
