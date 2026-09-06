@@ -4,7 +4,7 @@ Podman-based development environments with AI coding agents.
 
 ## What's included
 
-A shared base image (`agent-base`) provides a full multi-language toolchain on Ubuntu 24.04. Four agent images derive from it:
+A shared base image (`agent-base`) provides a full multi-language toolchain on Ubuntu 24.04. Five agent images derive from it:
 
 | Image | Agent | Containerfile |
 |---|---|---|
@@ -12,6 +12,7 @@ A shared base image (`agent-base`) provides a full multi-language toolchain on U
 | `claude-dev` | Claude Code | `Containerfile-claude` |
 | `codex-dev` | Codex | `Containerfile-codex` |
 | `cursor-dev` | Cursor | `Containerfile-cursor` |
+| `gemini-dev` | Gemini CLI | `Containerfile-gemini` |
 
 ### Toolchain (base image)
 
@@ -21,6 +22,7 @@ A shared base image (`agent-base`) provides a full multi-language toolchain on U
 | Java | OpenJDK 21, Maven, Gradle |
 | Rust | rustup (minimal), rust-analyzer, clippy, rustfmt, just |
 | Python | uv, Python 3.12, pyright, PyTorch (CPU), NumPy, SciPy, pandas, scikit-learn, etc. |
+| Node.js | Node.js 22, npm |
 | Android | cmdline-tools, platform-tools (NDK install commented out — enable in Containerfile) |
 | CLI tools | ripgrep, fd, git, zsh |
 
@@ -47,7 +49,7 @@ Add the `export` line to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.) to m
 
 ```bash
 cd /path/to/your/project
-opencode    # or: claude, codex, cursor
+opencode    # or: claude, codex, cursor, gemini
 ```
 
 On first run the image is built (slow), then a per-project container is created and the agent launches inside it. Subsequent runs reuse the existing container.
@@ -68,6 +70,9 @@ On first run the image is built (slow), then a per-project container is created 
 | `cursor` | Launch Cursor in the current project's container |
 | `cursor sh` | Open a bash shell in the existing Cursor container |
 | `cursor rm` | Remove all Cursor containers and images |
+| `gemini` | Launch Gemini CLI in the current project's container |
+| `gemini sh` | Open a bash shell in the existing Gemini container |
+| `gemini rm` | Remove all Gemini containers and images |
 
 Each project gets its own container (`<agent>-<projectname>`), so bind mounts never cross projects.
 
@@ -76,7 +81,7 @@ Each project gets its own container (`<agent>-<projectname>`), so bind mounts ne
 - `--cap-drop=ALL` — all Linux capabilities dropped
 - `--security-opt=no-new-privileges` — prevents privilege escalation
 - `--userns=keep-id` — UID/GID mapped to match the host user
-- Agent config (`~/.config/opencode`, `~/.claude`, `~/.codex`, `~/.cursor`) is bind-mounted, not baked into the image
+- Agent config (`~/.config/opencode`, `~/.claude`, `~/.codex`, `~/.cursor`, `~/.gemini`) is bind-mounted, not baked into the image
 
 ## Customization
 

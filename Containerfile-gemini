@@ -1,0 +1,15 @@
+FROM agent-base:latest
+
+ENV NPM_CONFIG_PREFIX=${HOME}/.local
+
+RUN npm install -g @google/gemini-cli \
+    && gemini --version
+
+RUN mkdir -p \
+    "${HOME}/.gemini" \
+    "${HOME}/.local/state/gemini" \
+    "${HOME}/.local/share/gemini"
+
+WORKDIR /workspace
+
+CMD ["gemini"]
