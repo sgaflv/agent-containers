@@ -1,4 +1,4 @@
-# containers
+# agent-containers
 
 Podman-based development environments with AI coding agents.
 
@@ -32,15 +32,15 @@ LSP servers (clangd, pyright, rust-analyzer, JDTLS) are managed by the agent at 
 
 - [Podman](https://podman.io/) (not Docker)
 
-The launcher locates the Containerfile relative to itself, so the repo can live anywhere on disk. Clone it to wherever you like, e.g. `~/containers`.
+The launcher locates the Containerfile relative to itself, so the repo can live anywhere on disk. Clone it to wherever you like, e.g. `~/agent-containers`.
 
 ## Quick start
 
 ### One-time setup
 
 ```bash
-git clone https://github.com/sgaflv/containers ~/containers
-export PATH="$HOME/containers:$PATH"
+git clone https://github.com/sgaflv/agent-containers ~/agent-containers
+export PATH="$HOME/agent-containers:$PATH"
 ```
 
 Add the `export` line to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.) to make it permanent.
