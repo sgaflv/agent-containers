@@ -4,11 +4,7 @@ set -euo pipefail
 
 AGENT_NAME="Cursor"
 
-AGENT_CONTAINERFILE=""
-
 AGENT_IMAGE_NAME="cursor-dev:latest"
-
-CONTAINER_NAME=""
 
 SCRIPT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 

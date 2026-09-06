@@ -4,9 +4,7 @@ set -euo pipefail
 
 AGENT_NAME="Gemini"
 
-
 AGENT_IMAGE_NAME="gemini-dev:latest"
-
 
 SCRIPT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 

@@ -3,9 +3,7 @@
 set -euo pipefail
 
 AGENT_NAME="Claude"
-AGENT_CONTAINERFILE=""
 AGENT_IMAGE_NAME="claude-dev:latest"
-CONTAINER_NAME=""
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 

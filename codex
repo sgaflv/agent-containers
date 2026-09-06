@@ -3,12 +3,7 @@
 set -euo pipefail
 
 AGENT_NAME="Codex"
-
-AGENT_CONTAINERFILE=""
-
 AGENT_IMAGE_NAME="codex-dev:latest"
-
-CONTAINER_NAME=""
 
 SCRIPT_DIR="$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
