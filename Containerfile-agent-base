@@ -22,6 +22,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gradle \
     gzip \
     less \
+    jq \
+    sqlite3 \
+    libsqlite3-dev \
+    netcat-openbsd \
+    dnsutils \
+    iputils-ping \
+    shellcheck \
     lib32z1 \
     libc6-dev-i386 \
     libgl1-mesa-dev \
@@ -54,6 +61,11 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y --no-install-recommends nodejs \
     && node --version \
     && npm --version
+
+RUN npm install -g pnpm yarn
+
+RUN npm install -g playwright \
+    && playwright install --with-deps chromium
 
 # ===========================================================================
 # User
