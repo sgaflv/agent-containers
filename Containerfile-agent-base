@@ -40,7 +40,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     maven \
     adb \
     apktool \
-    apksigner android-tools-adb \
+    apksigner \
+    android-tools-adb \
     zipalign \
     openjdk-21-jdk \
     openssh-client \
@@ -62,10 +63,6 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && node --version \
     && npm --version
 
-RUN npm install -g pnpm yarn
-
-RUN npm install -g playwright \
-    && playwright install --with-deps chromium
 
 # ===========================================================================
 # User
@@ -91,7 +88,6 @@ USER agentuser
 
 ENV HOME=/home/agentuser
 
-
 # ===========================================================================
 # Java
 # ===========================================================================
@@ -111,6 +107,34 @@ ENV RUSTUP_HOME=${HOME}/.rustup
 
 ENV PATH=${JAVA_HOME}/bin:${HOME}/.cargo/bin:${HOME}/.local/bin:${HOME}/.venv/bin:${PATH}
 
+# ===========================================================================
+# Bun
+#
+# Bun provides the JavaScript/TypeScript runtime, package manager,
+# script runner, test runner, and bunx command.
+#
+# No Node.js, npm, pnpm, or yarn are installed.
+# ===========================================================================
+
+ENV BUN_INSTALL=${HOME}/.bun
+ENV PATH=${BUN_INSTALL}/bin:${PATH}
+
+RUN curl -fsSL https://bun.com/install | bash \
+    && bun --version \
+    && bunx --bun --version
+
+# ===========================================================================
+# Playwright
+#
+# Installed through Bun rather than npm.
+# ===========================================================================
+
+#RUN bun add --global playwright \
+#    && playwright install --with-deps chromium
+
+# ===========================================================================
+# Rust
+# ===========================================================================
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs \
     | sh -s -- -y --profile minimal
@@ -119,7 +143,6 @@ RUN rustup component add \
         rust-analyzer \
         clippy \
         rustfmt
-
 
 RUN cargo install just
 
@@ -259,6 +282,12 @@ RUN echo "============================================================" \
     && javac -version \
     && mvn --version \
     && gradle --version \
+    \
+    && echo "============================================================" \
+    && echo "JavaScript / TypeScript — Bun" \
+    && echo "============================================================" \
+    && bun --version \
+    && bunx --bun --version \
     \
     && echo "============================================================" \
     && echo "Rust" \
